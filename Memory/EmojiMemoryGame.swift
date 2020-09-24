@@ -7,19 +7,16 @@
 //
 import SwiftUI
 
-class EmojiMemoryGame {
-    private var mData: MemoryGame<String> = createGame()
+class EmojiMemoryGame: ObservableObject {
+    @Published private var model: MemoryGame<String> = createGame()
     
     
-    var cards: Array<MemoryGame<String>.Card> {
-        mData.cards
+    var cards: Array<Card<String>> {
+        model.cards
     }
     
-    func choose(card: MemoryGame<String>.Card) {
-//        let chosenIndex = self.indexOf(of: card)
-//        var chosenCard = self.mData[chosenIndex]
-//
-//        chosenCard.isFaceUp = !chosenCard .isFaceUp
+    func choose(card: Card<String>) {
+        model.choose(card: card)
     }
     
     static func createGame() -> MemoryGame<String> {

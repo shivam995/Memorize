@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+struct Card<CardContent>: Identifiable {
+    var isFaceUp: Bool = false
+    var isMatched: Bool = false
+    var content: CardContent
+    var id: Int
+}
+

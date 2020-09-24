@@ -8,14 +8,30 @@
 
 import SwiftUI
 
-struct Grid: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct Grid<Item, ItemView>: View where Item: Identifiable, ItemView: View  {
+    var items: [Item]
+    var viewForItem: (Item) -> ItemView
+    
+    init(_ items: [Item], itemView: @escaping (Item) -> ItemView) {
+        self.items = items
+        self.viewForItem = itemView
     }
-}
-
-struct Grid_Previews: PreviewProvider {
-    static var previews: some View {
-        Grid()
+    var body: some View {
+        GeometryReader { geometry in
+            self.body(for: GridLayout(itemCount: self.items.count, in: geometry.size))
+        }
+    }
+    
+    func body(for gridLayout: GridLayout)-> some View {
+        ForEach(items) { item in
+            self.gridBody(for: item, in: gridLayout)
+        }
+    }
+    
+    func gridBody(for item: Item, in layout: GridLayout) -> some View {
+        let index = items.firstIndex(of: item)!
+        return viewForItem(item)
+            .frame(width: layout.itemSize.width, height: layout.itemSize.height)
+            .position(layout.location(ofItemAt: index))
     }
 }
